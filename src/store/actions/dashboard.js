@@ -5,3 +5,4 @@ export const fetchDashboardDataSuccess = createAction('DASHBOARD_FETCH_DATA_SUCC
 export const fetchDashboardDataError = createAction('DASHBOARD_FETCH_DATA_ERROR');
 
 export const selectRow = createAction('DASHBOARD_SELECT_ROW');
+export const toggleSelection = createAction('DASHBOARD_TOGGLE_SELECTION');

@@ -3,19 +3,20 @@ import {
   fetchDashboardDataPending,
   fetchDashboardDataSuccess,
   fetchDashboardDataError,
-  selectRow
+  selectRow,
+  toggleSelection
 } from '../actions/dashboard';
-import find from 'lodash/find';
+import forEach from 'lodash/forEach';
 
 const initState = {
   fetching: false,
   error: null,
-  data: null
+  data: null,
 };
 
 export default createReducer({
   [fetchDashboardDataPending]: (state, payload) => {
-    return {state, ...payload, fetching: true};
+    return {...state, ...payload, fetching: true};
   },
   [fetchDashboardDataSuccess]: (state, payload) => {
 
@@ -36,7 +37,9 @@ export default createReducer({
     return {...state, fetching: false, error: payload};
   },
   [selectRow]: (state, id) => {
+    console.log(state.data)
     let row = state.data[id];
+
     return {
       ...state,
       data: {
@@ -46,6 +49,18 @@ export default createReducer({
           checked: !row.checked
         }
       }
+    };
+  },
+  [toggleSelection]: (state, payload) => {
+    const obj = {};
+    forEach(state.data, (el) => {
+      el.checked = payload;
+      obj[el.ID] = el;
+    });
+
+    return {
+      ...state,
+      data: obj
     };
   }
 }, initState);

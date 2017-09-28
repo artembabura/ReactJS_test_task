@@ -2,20 +2,21 @@ import React from 'react';
 import DashboardTable from './components/DashboardTable';
 import { connect } from 'react-redux';
 import fetchDashboardData from '../../../_data/fake_api_call';
-import { selectRow }from '../../../store/actions/dashboard';
-import dashboard from "../../../store/reducers/dashboard";
+import { selectRow, toggleSelection } from '../../../store/actions/dashboard';
 
 const mapStateToProps = (store) => ({
   dashboardData: store.dashboard.data,
   fetching: store.dashboard.fetching,
   fullSize: store.dashboard.fullSize,
   limit: store.dashboard.limit,
-  offset: store.dashboard.offset
+  offset: store.dashboard.offset,
+  selectAll: store.dashboard.selectAll
 });
 
 const mapDispatchToProps = (dispatch) => ({
   fetchDashboardData: (payload) => dispatch(fetchDashboardData(payload)),
-  selectRow: (id) => dispatch(selectRow(id))
+  selectRow: (id) => dispatch(selectRow(id)),
+  toggleSelection: (payload) => dispatch(toggleSelection(payload))
 });
 
 @connect(mapStateToProps, mapDispatchToProps)
@@ -47,6 +48,8 @@ export default class extends React.Component {
         data={this.props.dashboardData}
         onSelect={this.selectRow}
         changePageLength={this.fetchDashboardData}
+        toggleSelection={this.props.toggleSelection}
+        selectAll={this.props.selectAll}
         fullSize={this.props.fullSize}
         limit={this.props.limit}
         offset={this.props.offset}

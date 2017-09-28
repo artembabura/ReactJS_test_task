@@ -4,25 +4,38 @@ import {
   fetchDashboardDataSuccess,
   fetchDashboardDataError
 } from '../store/actions/dashboard';
+import filter from 'lodash/filter';
 
 export default (payload) => {
-  return function (dispatch) {
+  return function (dispatch, getState) {
 
     dispatch(fetchDashboardDataPending(payload));
 
     return new Promise(resolve => {
-      setTimeout(resolve, 1000);
+      setTimeout(resolve, 500);
     }).then(() => {
 
-      const {offset , limit} = payload;
+      const {
+        offset,
+        limit,
+        searchBid = getState().dashboard.searchBid
+      } = payload;
 
       let data = {...realData};
-      const sliced = data.values.slice(offset*limit, limit * (offset+1));
+      let sliced = data.values.slice(offset*limit, limit * (offset+1) + 1);
+      let fullSize = data.values.length;
+
+      if (searchBid && searchBid.toString().length > 0) {
+        sliced = filter(sliced, (el) => {
+          return el[0].includes(searchBid.toString())
+        });
+        fullSize = sliced.length;
+      }
 
       dispatch(fetchDashboardDataSuccess({
-        columns: realData.columns,
+        columns: data.columns,
         values: sliced,
-        fullSize: data.values.length
+        fullSize
       }));
     }).catch(e => {
       dispatch(fetchDashboardDataError(e))
