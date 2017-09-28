@@ -37,7 +37,6 @@ export default createReducer({
     return {...state, fetching: false, error: payload};
   },
   [selectRow]: (state, id) => {
-    console.log(state.data)
     let row = state.data[id];
 
     return {
